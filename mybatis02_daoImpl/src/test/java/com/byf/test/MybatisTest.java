@@ -2,7 +2,7 @@ package com.byf.test;
 
 
 import com.byf.dao.IUserDao;
-import com.byf.domain.QueryVO;
+import com.byf.dao.impl.UserDaoImpl;
 import com.byf.domain.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -41,21 +41,15 @@ public class MybatisTest {
          */
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
         /**
-         * 3.使用工厂生产生产SqlSession对象
-         *      1）生成SqlSession使用了工厂模式
-         *          优势：解耦（降低类之间的依赖关系）
-         */
-        sqlSession = factory.openSession();
-        /**
-         * 4.使用SqlSession创建Dao接口的代理对象
+         * 3.使用工厂创建Dao接口的代理对象
          *      1）创建Dao接口实现类使用了代理模式
          *          优势：不修改源码的基础上，增强方法
          */
-        userDao = sqlSession.getMapper(IUserDao.class);
+        userDao = new UserDaoImpl(factory);
     }
     @Test
     public void testConfig() throws IOException {
-        sqlSession.getMapper(IUserDao.class);
+        // sqlSession.getMapper(IUserDao.class);
         //5.使用代理对象执行方法
         List<User> users = userDao.findAll();
         for (User user:users){
@@ -63,49 +57,6 @@ public class MybatisTest {
         }
     }
 
-    /**
-     * 测试保存用户
-     */
-    @Test
-    public void testSave(){
-        User user = new User();
-        user.setUserName("Jack1");
-        user.setUserAddress("Nanjing1");
-        user.setUserSex("男");
-        user.setUserBirthday(new Date());
-        //5.使用代理对象执行方法
-        userDao.saveUser(user);
-        //6.提交保存操作
-        sqlSession.commit();
-    }
-
-    /**
-     * 测试保存用户
-     */
-    @Test
-    public void testUpdate(){
-        User user = new User();
-        user.setUserId(55);
-        user.setUserName("Jack");
-        user.setUserAddress("Shanghai");
-        user.setUserSex("男");
-        user.setUserBirthday(new Date());
-        //5.使用代理对象执行方法
-        userDao.updateUser(user);
-        //6.提交保存操作
-        sqlSession.commit();
-    }
-
-    /**
-     * 测试删除用户
-     */
-    @Test
-    public void testDelete(){
-        //5.使用代理对象执行方法
-        userDao.deleteUser(50);
-        //6.提交保存操作
-        sqlSession.commit();
-    }
 
     /**
      * 测试查询一个用户
@@ -139,47 +90,51 @@ public class MybatisTest {
         System.out.println(couont);
     }
 
-
     /**
-     * 测试模糊查询
+     * 测试保存操作
      */
     @Test
-    public void testFindByQueryVo(){
-        QueryVO queryVO = new QueryVO();
+    public void testSave(){
         User user = new User();
-        user.setUserName("J%");
-        queryVO.setUser(user);
-        //5.使用代理对象执行方法
-        List<User> users = userDao.findByQueryVo(queryVO);
-        for (User user1:users){
-            System.out.println(user);
-        }
+        user.setUserName("modify User property");
+        user.setUserAddress("北京市顺义区");
+        user.setUserSex("男");
+        user.setUserBirthday(new Date());
+        System.out.println("保存操作之前："+user);
+        //5.执行保存方法
+        userDao.saveUser(user);
+
+        System.out.println("保存操作之后："+user);
     }
 
+    /**
+     * 测试更新操作
+     */
+    @Test
+    public void testUpdate(){
+        User user = new User();
+        user.setUserId(50);
+        user.setUserName("mybastis update user");
+        user.setUserAddress("北京市顺义区");
+        user.setUserSex("女");
+        user.setUserBirthday(new Date());
+
+        //5.执行保存方法
+        userDao.updateUser(user);
+    }
+
+    /**
+     * 测试删除操作
+     */
+    @Test
+    public void testDelete(){
+        //5.执行删除方法
+        userDao.deleteUser(48);
+    }
 
     @After
     public void destroy() throws IOException {
-        sqlSession.close();
         in.close();
     }
 
-    /**
-     * 测试保存用户
-     */
-    @Test
-    public void testSave1(){
-        User user = new User();
-        user.setUserName("Jack");
-        user.setUserAddress("Nanjing");
-        user.setUserSex("男");
-        user.setUserBirthday(new Date());
-        System.out.println("Before");
-        System.out.println(user);
-        //5.使用代理对象执行方法
-        userDao.saveUser(user);
-        System.out.println("After");
-        System.out.println(user);
-        //6.提交保存操作
-        //sqlSession.commit();
-    }
 }
