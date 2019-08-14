@@ -15,12 +15,12 @@
     </resultMap>
 
     <!-- 配置查询所有 -->
-    <select id="findAll" resultType="User" >
+    <select id="findAll" resultMap="userMap">
         <!-- select id as userId,username as userName, sex as userSex, birthday as userBirthday,address as userAddress from user -->
         select * from user
     </select>
 
-    <select id="findById" parameterType="INT" resultType="User" >
+    <select id="findById" parameterType="INT" resultMap="userMap" >
         select * from user
         where id=#{uid}
     </select>
@@ -51,7 +51,7 @@
 
     <!-- 更新用户 -->
     <update id="updateUser" parameterType="USER">
-        update user set username=#{userName},address=#{userAddress},sex=#{userAex},birthday=#{userBirthday} where id=#{userId}
+        update user set username=#{userName},address=#{userAddress},sex=#{userSex},birthday=#{userBirthday} where id=#{userId}
     </update>
 
     <!-- 删除用户-->

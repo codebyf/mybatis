@@ -23,7 +23,12 @@ public class UserDaoImpl implements IUserDao {
     }
 
     public User findById(Integer userId) {
-        return null;
+        // 1.根据factory获取SqlSession对象
+        SqlSession session = factory.openSession();
+        // 2.调用SqlSession中的方法，实现查询列表
+        User user = session.selectOne("com.byf.dao.IUserDao.findById",userId);
+        session.close();
+        return user;
     }
 
     public List<User> findByName(String userName) {
@@ -31,18 +36,38 @@ public class UserDaoImpl implements IUserDao {
     }
 
     public int findTotal() {
-        return 0;
+        // 1.根据factory获取SqlSession对象
+        SqlSession session = factory.openSession();
+        // 2.调用SqlSession中的方法，实现查询列表
+        Integer count = session.selectOne("com.byf.dao.IUserDao.findTotal");
+        session.close();
+        return count;
     }
 
     public void updateUser(User user) {
-
+        // 1.根据factory获取SqlSession对象
+        SqlSession session = factory.openSession();
+        // 2.调用SqlSession中的方法，实现查询列表
+        session.update("com.byf.dao.IUserDao.updateUser", user);
+        session.commit();
+        session.close();
     }
 
     public void deleteUser(int i) {
-
+        // 1.根据factory获取SqlSession对象
+        SqlSession session = factory.openSession();
+        // 2.调用SqlSession中的方法，实现查询列表
+        session.delete("com.byf.dao.IUserDao.deleteUser",i);
+        session.commit();
+        session.close();
     }
 
     public void saveUser(User user) {
-
+        // 1.根据factory获取SqlSession对象
+        SqlSession session = factory.openSession();
+        // 2.调用SqlSession中的方法，实现查询列表
+        session.insert("com.byf.dao.IUserDao.saveUser", user);
+        session.commit();
+        session.close();
     }
 }
