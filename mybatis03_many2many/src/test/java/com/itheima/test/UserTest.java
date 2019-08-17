@@ -1,4 +1,4 @@
-package com.byf.test;
+package com.itheima.test;
 
 import com.byf.dao.IUserDao;
 import com.byf.domain.User;
@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.util.List;
-
 
 public class UserTest {
 
@@ -50,7 +49,10 @@ public class UserTest {
         for(User user : users){
             System.out.println("-----每个用户的信息------");
             System.out.println(user);
-            System.out.println(user.getAccounts());
+            System.out.println(user.getRoles());
         }
     }
+
+
+
 }

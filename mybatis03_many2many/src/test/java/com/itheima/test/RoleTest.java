@@ -1,7 +1,7 @@
-package com.byf.test;
+package com.itheima.test;
 
-import com.byf.dao.IUserDao;
-import com.byf.domain.User;
+import com.byf.dao.IRoleDao;
+import com.byf.domain.Role;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,11 +14,11 @@ import java.io.InputStream;
 import java.util.List;
 
 
-public class UserTest {
+public class RoleTest {
 
     private InputStream in;
     private SqlSession sqlSession;
-    private IUserDao userDao;
+    private IRoleDao roleDao;
 
     @Before//用于在测试方法执行之前执行
     public void init()throws Exception{
@@ -29,7 +29,7 @@ public class UserTest {
         //3.获取SqlSession对象
         sqlSession = factory.openSession(true);
         //4.获取dao的代理对象
-        userDao = sqlSession.getMapper(IUserDao.class);
+        roleDao = sqlSession.getMapper(IRoleDao.class);
     }
 
     @After//用于在测试方法执行之后执行
@@ -46,11 +46,14 @@ public class UserTest {
      */
     @Test
     public void testFindAll(){
-        List<User> users = userDao.findAll();
-        for(User user : users){
-            System.out.println("-----每个用户的信息------");
-            System.out.println(user);
-            System.out.println(user.getAccounts());
+        List<Role> roles = roleDao.findAll();
+        for(Role role : roles){
+            System.out.println("---每个角色的信息----");
+            System.out.println(role);
+            System.out.println(role.getUsers());
         }
     }
+
+
+
 }
